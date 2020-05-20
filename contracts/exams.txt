@@ -1,15 +1,19 @@
 // Req get //
 
 Req:
-localhost:3000/api/exams
+localhost:3000/api/exames
 
-Res:
+
+Response:
 {
- message: "Adicionado com sucesso!",
-    body: {
-    Exame: { exam_nome, compra, venda }
+"data":{
+"id":    
+"exam_nome":,
+"compra":,
+"venda":
 }
 }
+
 
 // Req get (by id) //
 
