@@ -1,0 +1,66 @@
+// Req get //
+
+Req:
+localhost:3000/api/exams
+
+Res:
+{
+ message: "Adicionado com sucesso!",
+    body: {
+    Exame: { exam_nome, compra, venda }
+}
+}
+
+// Req get (by id) //
+
+Requisição:
+localhost:3000/api/exams/:id
+
+Response:
+{
+"data":{
+"id":    
+"exam_nome":,
+"compra":,
+"venda":
+}
+}
+
+// req post (criação de exames) //
+
+Requisição:
+localhost:3000/api/exams
+
+Response:
+{
+"data":{  
+"exam_nome":,
+"compra":,
+"venda":
+}
+}
+
+// req update //
+
+Requisição:
+localhost:3000/api/exams/:id
+
+Response:
+{
+"data":{
+ "message: "Atualizado com sucesso"
+}
+}
+
+// req delete por id //
+
+Requisição:
+localhost:3000/api/exams/:id
+
+Response:
+{
+"data":{
+ "message: "Deletado com sucesso"
+ "id":
+}
+}
