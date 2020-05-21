@@ -8,9 +8,9 @@ Response:
 {
 "data":{
 "id":    
-"exam_nome":,
-"compra":,
-"venda":
+"exam_name":,
+"purchase_price":,
+"sell_price":
 }
 }
 
@@ -24,9 +24,9 @@ Response:
 {
 "data":{
 "id":    
-"exam_nome":,
-"compra":,
-"venda":
+"exam_name":,
+"purchase_price":,
+"sell_price":
 }
 }
 
@@ -38,9 +38,9 @@ localhost:3000/api/exams
 Response:
 {
 "data":{  
-"exam_nome":,
-"compra":,
-"venda":
+"exam_name":,
+"purchase_price":,
+"sell_price":
 }
 }
 

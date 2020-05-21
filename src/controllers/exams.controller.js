@@ -1,26 +1,30 @@
 const db = require("../config/database");
 
+
 // Criação de exames
 
 exports.createExams = async (req, res) => {
   const { exam_nome, compra, venda } = req.body;
-  const { rows } = await db.query(
+  const { rows } = await db.query(  
     "INSERT INTO exams (exam_nome, compra, venda) VALUES ($1, $2, $3)",
     [exam_nome, compra, venda]
   );
+  if (compra > venda) {
+    res.status(400).send({ message: "Vai fazer isso mesmo cara?"})
+  }
 
   res.status(201).send({
     message: "Adicionado com sucesso!",
     body: {
       Exame: { exam_nome, compra, venda }
     },
-  });
+  }) 
 };
 
 // Consulta de todos os exames
 
 exports.listAllExams = async (req, res) => {
-    const response = await db.query('SELECT * FROM exams ORDER BY exam_nome ASC');
+    const response = await db.query('SELECT exam_nome FROM exams ORDER BY exam_nome ASC');
     res.status(200).send(response.rows);
   };
 
