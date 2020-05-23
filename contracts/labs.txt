@@ -1,0 +1,68 @@
+// Req get //
+
+Req:
+localhost:3000/api/labs
+
+
+Response:
+{
+"data":{
+"id":    
+"lab_name":,
+"cnpj":
+}
+}
+
+
+// Req get (by id) //
+
+Requisição:
+localhost:3000/api/labs/:id
+
+Response:
+{
+"data":{
+"id":,    
+"lab_name":,
+"cnpj":
+}
+}
+
+// req post (cadastro de labs) //
+
+Requisição:
+localhost:3000/api/labs
+
+Response:
+{
+"data":{
+"id":,      
+"lab_name":,
+"cnpj":
+}
+}
+
+// req update //
+
+Requisição:
+localhost:3000/api/labs/:id
+
+Response:
+{
+"data":{
+ "message: "Atualizado com sucesso"
+}
+}
+
+// req delete por id //
+
+Requisição:
+localhost:3000/api/labs/:id
+
+Response:
+{
+"data":{
+ "message: "Deletado com sucesso"
+ "id":
+}
+}
