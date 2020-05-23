@@ -1,30 +1,56 @@
+// Requires da aplicação
 const db = require("../config/database");
 
+
+// Validação de exames
+
+const validateExams = async (body) => {
+  const {exam_nome, compra, venda} = body;
+  const response = {
+   errors: [],
+   success: true  
+  }
+ if (compra*1 >= venda*1) {
+   response.errors.push("Preço de compra não pode ser maior que o de venda");
+   response.success = false;
+ }
+ if (exam_nome === '') {
+  response.errors.push("Nome do exame não pode ficar em branco");
+  response.success = false;
+  } 
+  
+  return response
+  
+}
 
 // Criação de exames
 
 exports.createExams = async (req, res) => {
   const { exam_nome, compra, venda } = req.body;
+  const validation = await validateExams(req.body);
+
+  if (validation.success == false) {
+    res.status(400).send({message: validation.errors})
+    return;
+  }
+
   const { rows } = await db.query(  
     "INSERT INTO exams (exam_nome, compra, venda) VALUES ($1, $2, $3)",
     [exam_nome, compra, venda]
   );
-  if (compra > venda) {
-    res.status(400).send({ message: "Vai fazer isso mesmo cara?"})
-  }
 
   res.status(201).send({
     message: "Adicionado com sucesso!",
     body: {
       Exame: { exam_nome, compra, venda }
-    },
+    }
   }) 
 };
 
 // Consulta de todos os exames
 
 exports.listAllExams = async (req, res) => {
-    const response = await db.query('SELECT exam_nome FROM exams ORDER BY exam_nome ASC');
+    const response = await db.query('SELECT id, exam_nome FROM exams ORDER BY exam_nome ASC');
     res.status(200).send(response.rows);
   };
 
