@@ -1,6 +1,27 @@
 // requires da aplicação //
 const db = require("../config/database");
 
+// Validação da aplicação //
+
+const validateUnids = async (body) => {
+  const {unid_nome, endereco, telefone, lab_id} = body;
+  const response = {
+    errors: [],
+    success: true
+  }
+  if(unid_nome === '') {
+    response.errors.push('Nome da unidade não pode ficar em branco')
+    response.success = false;
+  }
+  if (endereco === '') {
+    response.errors.push('Endereço não pode ficar em branco')
+    response.success = false;
+  }
+  if (telefone === '') {
+    response.errors.push('Telefone não pode ficar em branco')
+    response.success = false;
+  }
+}
 
 
 // Rota para adicionar uma unidade //

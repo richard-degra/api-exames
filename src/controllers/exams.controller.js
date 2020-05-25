@@ -47,6 +47,22 @@ exports.createExams = async (req, res) => {
   }) 
 };
 
+// Associar um exame com uma unidade 
+
+exports.createExamsLink = async (req, res) => {
+  const {exam_id, unid_id} = req.body;
+  const {rows} = await db.query(
+    'INSERT INTO assoc (exam_id, unid_id) VALUES ($1, $2)',
+    [exam_id, unid_id]
+  );
+  res.status(201).send({
+    message: 'Adicionado com sucesso!',
+    body:{
+      Exame: {exam_id, unid_id}
+    }
+  })
+};
+
 // Consulta de todos os exames
 
 exports.listAllExams = async (req, res) => {
@@ -61,7 +77,18 @@ exports.findExamsById = async (req, res) => {
     const response = await db.query('SELECT * FROM exams WHERE id = $1', [ExamsId]);
     res.status(200).send(response.rows);
   }
- 
+
+// COnsulta de exames linkados com alguma unidade
+
+exports.listLink = async (req, res) => {
+  const {unid_id, exam_id, lab_id} = req.body
+  const response = await db.query(
+   'SELECT * from assoc INNER JOIN unid on assoc.unid_id = unid.lab_id'
+  )
+  
+  res.status(200).send(response.rows)
+  }
+
 // Atualizar exames por id
 
 exports.updateExamsById = async (req, res) => {
