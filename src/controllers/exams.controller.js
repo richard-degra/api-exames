@@ -1,6 +1,9 @@
-// Requires da aplicação
-const db = require("../config/database");
+// Requires da db
+const db = require('../config/database')
 
+// imports da aplicação 
+const { listAllExamsQuery, createExamQuery, listByIdQuery, updateExamQuery,
+deleteExamQuery, linkListQuery, createLinkQuery} = require("../queries/exams");
 
 // Validação de exames
 
@@ -10,15 +13,32 @@ const validateExams = async (body) => {
    errors: [],
    success: true  
   }
+
+ if (exam_nome === undefined || exam_nome === null || exam_nome === '' ) {
+  response.errors.push("Nome do exame não pode ficar em branco");
+  response.success = false;
+  } 
+
+if (compra === undefined || compra === null || compra === NaN || compra <=0) {
+  response.errors.push("Preço de compra inválido")
+  response.success = false;
+}
+
+if (venda === undefined || venda === null || venda === NaN || venda <=0) {
+  response.errors.push("Preço de venda inválido")
+  response.success = false;
+}
+
+if (!response.success) {
+  return response
+}
+
  if (compra*1 >= venda*1) {
    response.errors.push("Preço de compra não pode ser maior que o de venda");
    response.success = false;
  }
- if (exam_nome === '') {
-  response.errors.push("Nome do exame não pode ficar em branco");
-  response.success = false;
-  } 
-  
+
+
   return response
   
 }
@@ -33,12 +53,9 @@ exports.createExams = async (req, res) => {
     res.status(400).send({message: validation.errors})
     return;
   }
-
-  const { rows } = await db.query(  
-    "INSERT INTO exams (exam_nome, compra, venda) VALUES ($1, $2, $3)",
-    [exam_nome, compra, venda]
-  );
-
+  console.log(exam_nome, compra, venda)
+  const { rows } = await db.query(createExamQuery, [exam_nome, compra, venda]);
+ 
   res.status(201).send({
     message: "Adicionado com sucesso!",
     body: {
@@ -51,10 +68,7 @@ exports.createExams = async (req, res) => {
 
 exports.createExamsLink = async (req, res) => {
   const {exam_id, unid_id} = req.body;
-  const {rows} = await db.query(
-    'INSERT INTO assoc (exam_id, unid_id) VALUES ($1, $2)',
-    [exam_id, unid_id]
-  );
+  const {rows} = await db.query(createLinkQuery, [exam_id, unid_id]);
   res.status(201).send({
     message: 'Adicionado com sucesso!',
     body:{
@@ -66,7 +80,7 @@ exports.createExamsLink = async (req, res) => {
 // Consulta de todos os exames
 
 exports.listAllExams = async (req, res) => {
-    const response = await db.query('SELECT id, exam_nome FROM exams ORDER BY exam_nome ASC');
+    const response = await db.query(listAllExamsQuery);
     res.status(200).send(response.rows);
   };
 
@@ -74,7 +88,7 @@ exports.listAllExams = async (req, res) => {
 
 exports.findExamsById = async (req, res) => {
     const ExamsId = parseInt(req.params.id);
-    const response = await db.query('SELECT * FROM exams WHERE id = $1', [ExamsId]);
+    const response = await db.query(listByIdQuery, [ExamsId]) ;
     res.status(200).send(response.rows);
   }
 
@@ -82,9 +96,7 @@ exports.findExamsById = async (req, res) => {
 
 exports.listLink = async (req, res) => {
   const {unid_id, exam_id, lab_id} = req.body
-  const response = await db.query(
-   'SELECT * from assoc INNER JOIN unid on assoc.unid_id = unid.lab_id'
-  )
+  const response = await db.query(linkListQuery)
   
   res.status(200).send(response.rows)
   }
@@ -95,10 +107,7 @@ exports.updateExamsById = async (req, res) => {
     const id = parseInt(req.params.id);
     const { exam_nome, compra, venda} = req.body;
   
-    const response = await db.query(
-      "UPDATE exams SET exam_nome = $1, compra = $2, venda = $3 WHERE id = $4",
-      [exam_nome, compra, venda, id]
-    );
+    const response = await db.query(updateExamQuery, [exam_nome, compra, venda, id]);
   
     res.status(200).send({ message: "Atualizado com sucesso!" });
   };
@@ -107,9 +116,7 @@ exports.updateExamsById = async (req, res) => {
 
 exports.deleteExamsById = async (req, res) => {
     const ExamsId = parseInt(req.params.id);
-    await db.query('DELETE FROM exams WHERE id = $1', [
-      ExamsId
-    ]);
+    await db.query(deleteExamQuery, [ExamsId]);
   
     res.status(200).send({ message: 'Deletado com sucesso!', ExamsId });
   };

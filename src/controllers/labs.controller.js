@@ -1,5 +1,8 @@
 // Requires da aplicação
-const db = require("../config/database");
+const db = require('../config/database');
+
+// imports da aplicação 
+const { createLabQuery, listAllLabQuery, listByIdQuery, updateByIdQuery, deleteByIdQuery } = require('../queries/labs')
 
 // Validação de labs //
 
@@ -9,12 +12,12 @@ const validateLabs = async (body) => {
     errors: [],
     success: true
   }
-  if (lab_nome === '') {
-    response.errors.push('Nome do laboratório não pode ficar em branco');
+  if (lab_nome === '' || lab_nome === undefined || lab_nome === null) {
+    response.errors.push('Nome inválido');
     response.success = false;
   }
-  if (cnpj === '') {
-    response.errors.push('CNPJ não pode ficar em branco');
+  if (cnpj === undefined || cnpj === null || cnpj === '' || cnpj === NaN) {
+    response.errors.push('CNPJ inválido');
     response.success = false;
   }
   return response 
@@ -33,13 +36,10 @@ exports.createLab = async (req, res) => {
     return;
   }
 
-  const {rows} = await db.query (
-    "INSERT INTO labs (lab_nome, cnpj) VALUES ($1, $2)",
-    [lab_nome, cnpj]  
-  );
+  const {rows} = await db.query (createLabQuery, [lab_nome, cnpj]);
 
   res.status(201).send({
-      message: "Adicionado com sucesso",
+      message: 'Adicionado com sucesso',
       body: {
           labs: {lab_nome, cnpj}
       }
@@ -49,7 +49,7 @@ exports.createLab = async (req, res) => {
 // rota para listagem dos labs //
 
 exports.listAllLabs = async (req, res) => {
-    const response = await db.query('SELECT lab_nome, cnpj FROM labs ORDER BY lab_nome ASC');
+    const response = await db.query(listAllLabQuery);
     res.status(200).send(response.rows);
   };
 
@@ -57,7 +57,7 @@ exports.listAllLabs = async (req, res) => {
 
 exports.findLabsById = async (req, res) => {
    const LabsID = parseInt(req.params.id);
-   const response = await db.query ('SELECT lab_nome, cnpj from labs WHERE id = $1', [LabsID]);
+   const response = await db.query (listByIdQuery, [LabsID]);
    res.status(200).send(response.rows) 
 }
 
@@ -67,9 +67,7 @@ exports.updateLabsById = async (req, res) => {
    const id = parseInt(req.params.id);
    const {lab_nome, cnpj} = req.body;
    
-   const response = await db.query('UPDATE labs SET lab_nome = $1, cnpj = $2 WHERE id = $3',
-    [lab_nome, cnpj, id]
-   );
+   const response = await db.query(updateByIdQuery, [lab_nome, cnpj, id]);
    res.status(200).send({message: "Atualizado com sucesso!"})
 }
 
@@ -77,7 +75,7 @@ exports.updateLabsById = async (req, res) => {
 
 exports.deleteLabsById = async (req, res) => {
    const LabsID = parseInt(req.params.id);
-   await db.query('DELETE FROM labs WHERE id = $1', [LabsID]);
+   await db.query(deleteByIdQuery, [LabsID]);
    
   res.status(200).send({message: 'Deletado com sucesso!', LabsID}) 
 }

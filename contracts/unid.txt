@@ -1,0 +1,71 @@
+// Req get (todas as unidades) //
+
+Req:
+localhost:3000/api/unids
+
+
+Response:
+{
+"data":{
+"id":    
+"name":,
+"address":,
+"telephone":
+}
+}
+
+
+// Req get (by id) //
+
+Requisição:
+localhost:3000/api/unids/:id
+
+Response:
+{
+"data":{
+"id":,    
+"name":,
+"endereco":,
+"telephone":
+}
+}
+
+// req post (cadastro de unidades) //
+
+Requisição:
+localhost:3000/api/unids
+
+Response:
+{
+"data":{
+"message: Adicionado com sucesso",
+"id":,      
+"address":,
+"telephone":
+}
+}
+
+// req update (Atualizar informações) //
+
+Requisição:
+localhost:3000/api/labs/:id
+
+Response:
+{
+"data":{
+ "message: "Atualizado com sucesso"
+}
+}
+
+// req delete por id //
+
+Requisição:
+localhost:3000/api/labs/:id
+
+Response:
+{
+"data":{
+ "message: "Deletado com sucesso"
+ "UnidID":
+}
+}

@@ -1,6 +1,10 @@
 // requires da aplicação //
 const db = require("../config/database");
 
+// imports da aplicação 
+
+const { createUnidQuery, listAllUnidQuery, listByIdQuery, updateByIdQuery, deleteByIdQuery } = require('../queries/unid')
+
 // Validação da aplicação //
 
 const validateUnids = async (body) => {
@@ -28,10 +32,8 @@ const validateUnids = async (body) => {
 
 exports.createUnid = async (req, res) => {
   const {unid_nome, endereco, telefone, lab_id} = req.body
-  const {rows} = await db.query(
-    'INSERT INTO unid (unid_nome, endereco, telefone, lab_id) VALUES ($1, $2, $3, $4) RETURNING id',
-    [unid_nome, endereco, telefone, lab_id]
-  )
+  const {rows} = await db.query(createUnidQuery, [unid_nome, endereco, telefone, lab_id])
+  
   // objeto auxiliar //
   const response = {
     message: "Adicionado com sucesso!",
@@ -51,7 +53,7 @@ exports.createUnid = async (req, res) => {
 // Rota para listar todas as unidades //
 
 exports.listAllUnid = async (req, res) => {
-  const response = await db.query('SELECT * from unid ORDER BY unid_nome ASC')
+  const response = await db.query(listAllUnidQuery)
   res.status(200).send(response.rows)
 }
 
@@ -60,7 +62,7 @@ exports.listAllUnid = async (req, res) => {
 
 exports.findUnidById = async (req, res) => {
   const UnidID = parseInt(req.params.id)
-  const response = await db.query('SELECT unid_nome, endereco, telefone from unid WHERE id = $1', [UnidID]);
+  const response = await db.query(listByIdQuery, [UnidID]);
   res.status(200).send(response.rows)
 }
 
@@ -70,10 +72,7 @@ exports.updateUnidById = async (req, res) => {
   const id = parseInt(req.params.id)
   const {unid_nome, endereco, telefone} = req.body;
 
-  const response = await db.query(
-    'UPDATE unid SET unid_nome = $1, endereco = $2, telefone = $3 WHERE id = $4',
-    [unid_nome, endereco, telefone, id]
-  );
+  const response = await db.query(updateByIdQuery, [unid_nome, endereco, telefone, id]);
    res.status(200).send({message: 'Atualizado com sucesso'});
 }
 
@@ -81,7 +80,7 @@ exports.updateUnidById = async (req, res) => {
 
 exports.deleteUnidById = async (req, res) => {
     const UnidID = parseInt(req.params.id);
-    await db.query('DELETE FROM unid WHERE id = $1', [UnidID]);
+    await db.query(deleteByIdQuery, [UnidID]);
     
    res.status(200).send({message: 'Deletado com sucesso!', UnidID}) 
  }
