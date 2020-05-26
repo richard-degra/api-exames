@@ -13,16 +13,16 @@ const validateUnids = async (body) => {
     errors: [],
     success: true
   }
-  if(unid_nome === '') {
-    response.errors.push('Nome da unidade não pode ficar em branco')
+  if(unid_nome === '' || unid_nome === undefined || unid_nome === null) {
+    response.errors.push('Nome da unidade inválido')
     response.success = false;
   }
-  if (endereco === '') {
-    response.errors.push('Endereço não pode ficar em branco')
+  if (endereco === '' || endereco === undefined || endereco === null) {
+    response.errors.push('Endereço inválido')
     response.success = false;
   }
-  if (telefone === '') {
-    response.errors.push('Telefone não pode ficar em branco')
+  if (telefone === '' || telefone === undefined || telefone === NaN) {
+    response.errors.push('Telefone inválido')
     response.success = false;
   }
 }
