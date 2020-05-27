@@ -3,7 +3,7 @@ const db = require('../config/database')
 
 // imports da aplicação 
 const { listAllExamsQuery, createExamQuery, listByIdQuery, updateExamQuery,
-deleteExamQuery, linkListQuery, createLinkQuery} = require("../queries/exams");
+deleteExamQuery, linkListQuery, createLinkQuery} = require('../queries/exams');
 
 // Validação de exames
 
@@ -15,17 +15,17 @@ const validateExams = async (body) => {
   }
 
  if (exam_nome === undefined || exam_nome === null || exam_nome === '' ) {
-  response.errors.push("Nome do exame não pode ficar em branco");
+  response.errors.push('Nome do exame não pode ficar em branco');
   response.success = false;
   } 
 
 if (compra === undefined || compra === null || compra === NaN || compra <=0) {
-  response.errors.push("Preço de compra inválido")
+  response.errors.push('Preço de compra inválido')
   response.success = false;
 }
 
 if (venda === undefined || venda === null || venda === NaN || venda <=0) {
-  response.errors.push("Preço de venda inválido")
+  response.errors.push('Preço de venda inválido')
   response.success = false;
 }
 
@@ -34,7 +34,7 @@ if (!response.success) {
 }
 
  if (compra*1 >= venda*1) {
-   response.errors.push("Preço de compra não pode ser maior que o de venda");
+   response.errors.push('Preço de compra não pode ser maior que o de venda');
    response.success = false;
  }
 
@@ -53,15 +53,21 @@ exports.createExams = async (req, res) => {
     res.status(400).send({message: validation.errors})
     return;
   }
-  console.log(exam_nome, compra, venda)
-  const { rows } = await db.query(createExamQuery, [exam_nome, compra, venda]);
  
-  res.status(201).send({
-    message: "Adicionado com sucesso!",
+  const { rows } = await db.query(createExamQuery, [exam_nome, compra, venda]);
+
+// Objeto auxiliar
+
+  const response = {
+    message: 'Adicionado com sucesso',
     body: {
-      Exame: { exam_nome, compra, venda }
+      name: exam_nome,
+      purch_price: compra,
+      sell_price: venda
     }
-  }) 
+  }
+ 
+  res.status(201).send(response)
 };
 
 // Associar um exame com uma unidade 
@@ -109,7 +115,7 @@ exports.updateExamsById = async (req, res) => {
   
     const response = await db.query(updateExamQuery, [exam_nome, compra, venda, id]);
   
-    res.status(200).send({ message: "Atualizado com sucesso!" });
+    res.status(200).send({ message: 'Atualizado com sucesso!' });
   };
   
 // Deletar exames por id

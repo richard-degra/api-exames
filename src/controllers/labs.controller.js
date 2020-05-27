@@ -36,14 +36,19 @@ exports.createLab = async (req, res) => {
     return;
   }
 
+  // Objeto auxiliar //
+
+  const response = {
+    message: 'Adicionado com sucesso',
+    body: {
+      name: lab_nome,
+      cnpj: cnpj
+    }
+  }
+  
   const {rows} = await db.query (createLabQuery, [lab_nome, cnpj]);
 
-  res.status(201).send({
-      message: 'Adicionado com sucesso',
-      body: {
-          labs: {lab_nome, cnpj}
-      }
-  })
+  res.status(201).send(response)
 };
 
 // rota para listagem dos labs //
@@ -68,7 +73,7 @@ exports.updateLabsById = async (req, res) => {
    const {lab_nome, cnpj} = req.body;
    
    const response = await db.query(updateByIdQuery, [lab_nome, cnpj, id]);
-   res.status(200).send({message: "Atualizado com sucesso!"})
+   res.status(200).send({message: 'Atualizado com sucesso!'})
 }
 
 // rota para deletar um lab pelo id //

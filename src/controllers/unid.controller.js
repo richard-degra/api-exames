@@ -36,7 +36,7 @@ exports.createUnid = async (req, res) => {
   
   // objeto auxiliar //
   const response = {
-    message: "Adicionado com sucesso!",
+    message: 'Adicionado com sucesso!',
     body: {
        id: rows[0].id,
        name: unid_nome,
