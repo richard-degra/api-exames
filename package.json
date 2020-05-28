@@ -11,7 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/richard-degra/api-exames.git"
   },
-  "keywords": [],
+  "keywords": [
+    "heroku"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -27,5 +29,8 @@
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "pg": "^8.2.1"
-  }
+  },
+  "engines": {
+    "node": "12.16.3"
+    }
 }
